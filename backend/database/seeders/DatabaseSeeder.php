@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             'name'     => 'Admin User',
             'email'    => 'admin@smartcms.com',
             'password' => Hash::make('password'), // Store hashed password securely
-            'role'     => 'admin', // Access level admin
+            'role'     => 'admin',                // Access level admin
         ]);
 
         // Seed default Editor User for local development and testing
@@ -26,7 +26,13 @@ class DatabaseSeeder extends Seeder
             'name'     => 'Editor User',
             'email'    => 'editor@smartcms.com',
             'password' => Hash::make('password'),
-            'role'     => 'editor', // Access level editor
+            'role'     => 'editor',               // Access level editor
+        ]);
+
+        // Seed sample categories and posts for Sprint 2 testing
+        $this->call([
+            CategorySeeder::class,
+            PostSeeder::class,
         ]);
     }
 }
