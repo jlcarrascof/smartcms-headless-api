@@ -7,10 +7,53 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: "Post",
+    title: "Post Model",
+    description: "Post model database schema representation",
+    required: ["id", "title", "slug", "content", "status", "user_id"]
+)]
 class Post extends Model
 {
     use HasFactory, SoftDeletes;
+
+    #[OA\Property(property: "id", type: "integer", readOnly: true, example: 1)]
+    protected $id;
+
+    #[OA\Property(property: "title", type: "string", example: "Getting Started with Laravel 11")]
+    protected $title;
+
+    #[OA\Property(property: "slug", type: "string", example: "getting-started-laravel-11")]
+    protected $slug;
+
+    #[OA\Property(property: "content", type: "string", example: "Laravel 11 introduces a streamlined application structure...")]
+    protected $content;
+
+    #[OA\Property(property: "excerpt", type: "string", nullable: true, example: "A practical introduction to Laravel 11.")]
+    protected $excerpt;
+
+    #[OA\Property(property: "status", type: "string", enum: ["draft", "published", "archived"], example: "published")]
+    protected $status;
+
+    #[OA\Property(property: "featured_image", type: "string", nullable: true, example: "https://res.cloudinary.com/demo/image/upload/sample.jpg")]
+    protected $featured_image;
+
+    #[OA\Property(property: "user_id", type: "integer", example: 1)]
+    protected $user_id;
+
+    #[OA\Property(property: "category_id", type: "integer", nullable: true, example: 2)]
+    protected $category_id;
+
+    #[OA\Property(property: "published_at", type: "string", format: "date-time", nullable: true, example: "2026-06-17T18:34:02Z")]
+    protected $published_at;
+
+    #[OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true, example: "2026-06-17T18:34:02Z")]
+    protected $created_at;
+
+    #[OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true, example: "2026-06-17T18:34:02Z")]
+    protected $updated_at;
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +71,7 @@ class Post extends Model
         'featured_image',
         'published_at',
     ];
+
 
     /**
      * The attributes that should be cast to native types.
