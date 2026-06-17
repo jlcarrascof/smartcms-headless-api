@@ -13,32 +13,20 @@ use OpenApi\Attributes as OA;
     schema: "Category",
     title: "Category Model",
     description: "Category model database schema representation",
-    required: ["id", "name", "slug"]
+    required: ["id", "name", "slug"],
+    properties: [
+        new OA\Property(property: "id", type: "integer", readOnly: true, example: 1),
+        new OA\Property(property: "name", type: "string", example: "Laravel"),
+        new OA\Property(property: "slug", type: "string", example: "laravel"),
+        new OA\Property(property: "description", type: "string", nullable: true, example: "Tutorials, tips, and best practices for Laravel."),
+        new OA\Property(property: "parent_id", type: "integer", nullable: true, example: null),
+        new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true, example: "2026-06-17T18:34:02Z"),
+        new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true, example: "2026-06-17T18:34:02Z")
+    ]
 )]
 class Category extends Model
 {
     use HasFactory;
-
-    #[OA\Property(property: "id", type: "integer", readOnly: true, example: 1)]
-    protected $id;
-
-    #[OA\Property(property: "name", type: "string", example: "Laravel")]
-    protected $name;
-
-    #[OA\Property(property: "slug", type: "string", example: "laravel")]
-    protected $slug;
-
-    #[OA\Property(property: "description", type: "string", nullable: true, example: "Tutorials, tips, and best practices for Laravel.")]
-    protected $description;
-
-    #[OA\Property(property: "parent_id", type: "integer", nullable: true, example: null)]
-    protected $parent_id;
-
-    #[OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true, example: "2026-06-17T18:34:02Z")]
-    protected $created_at;
-
-    #[OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true, example: "2026-06-17T18:34:02Z")]
-    protected $updated_at;
 
     /**
      * The attributes that are mass assignable.
