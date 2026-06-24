@@ -29,11 +29,20 @@ Route::prefix('v1')->group(function () {
         Route::post('auth/refresh', [AuthController::class, 'refresh']);
         Route::get('auth/me', [AuthController::class, 'me']);
 
-        // Posts CRUD endpoints (Added in Sprint 2)
+        // Posts Reading — Available for admin, editor, and viewer roles
         Route::get('posts', [PostController::class, 'index'])->name('posts.index');
         Route::get('posts/{id}', [PostController::class, 'show'])->name('posts.show');
-        Route::post('posts', [PostController::class, 'store'])->name('posts.store');
-        Route::put('posts/{id}', [PostController::class, 'update'])->name('posts.update');
-        Route::delete('posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+        // Posts Writing — Only accessible by admin and editor roles
+        Route::middleware('role:admin,editor')->group(function () {
+            Route::post('posts', [PostController::class, 'store'])->name('posts.store');
+            Route::put('posts/{id}', [PostController::class, 'update'])->name('posts.update');
+        });
+
+        // Posts Deletion — Only accessible by admin role
+        Route::middleware('role:admin')->group(function () {
+            Route::delete('posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+        });
+
     });
 });
