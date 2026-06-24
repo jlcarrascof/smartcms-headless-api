@@ -5,9 +5,16 @@ namespace App\Services;
 use App\Models\Post;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use App\Services\CloudinaryService;
+use Illuminate\Http\UploadedFile;
 
 class PostService
 {
+    /**
+     * Inject CloudinaryService
+     */
+    public function __construct(private CloudinaryService $cloudinaryService) {}
+
     /**
      * Fetch paginated posts applying search, category, status filters, and sorting.
      *
@@ -69,6 +76,11 @@ class PostService
             $data['published_at'] = now();
         }
 
+        // Handle featured image upload via Cloudinary
+        if (isset($data['featured_image']) && $data['featured_image'] instanceof UploadedFile) {
+            $data['featured_image'] = $this->cloudinaryService->uploadImage($data['featured_image'], 'smartcms/posts');
+        }
+
         return Post::create($data);
     }
 
@@ -82,8 +94,22 @@ class PostService
     public function update(int $id, array $data): Post
     {
         $post = Post::findOrFail($id);
-        $post->update($data);
 
+        // Handle featured image upload via Cloudinary
+        if (isset($data['featured_image']) && $data['featured_image'] instanceof UploadedFile) {
+            // Delete old image if exists
+            if ($post->featured_image) {
+                $this->cloudinaryService->deleteImage($post->featured_image);
+            }
+            $data['featured_image'] = $this->cloudinaryService->uploadImage($data['featured_image'], 'smartcms/posts');
+        } elseif (array_key_exists('featured_image', $data) && $data['featured_image'] === null) {
+            // User wants to remove image
+            if ($post->featured_image) {
+                $this->cloudinaryService->deleteImage($post->featured_image);
+            }
+        }
+
+        $post->update($data);
         // Clear the specific cached post after updating its values
         Cache::forget("post_{$id}");
 

@@ -22,12 +22,13 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => 'required|string|max:255',
-            'content'     => 'required|string',
-            'excerpt'     => 'nullable|string|max:500',
-            'status'      => 'required|in:draft,published,archived',
-            'category_id' => 'nullable|exists:categories,id',
-            'slug'        => 'nullable|string|unique:posts,slug',
+            'title'          => 'required|string|max:255',
+            'content'        => 'required|string',
+            'excerpt'        => 'nullable|string|max:500',
+            'status'         => 'required|in:draft,published,archived',
+            'category_id'    => 'nullable|exists:categories,id',
+            'slug'           => 'nullable|string|unique:posts,slug',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ];
     }
 }
