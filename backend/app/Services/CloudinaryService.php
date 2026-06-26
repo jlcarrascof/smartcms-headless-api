@@ -16,9 +16,9 @@ class CloudinaryService
      */
     public function uploadImage(UploadedFile $file, string $folder = 'smartcms'): string
     {
-        $uploadedFileUrl = Cloudinary::upload($file->getRealPath(), [
+        $uploadedFileUrl = cloudinary()->uploadApi()->upload($file->getRealPath(), [
             'folder' => $folder,
-        ])->getSecurePath();
+        ])['secure_url'];
 
         return $uploadedFileUrl;
     }
@@ -38,7 +38,7 @@ class CloudinaryService
         $publicId = $this->getPublicIdFromUrl($url);
 
         if ($publicId) {
-            Cloudinary::destroy($publicId);
+            cloudinary()->uploadApi()->destroy($publicId);
             return true;
         }
 
