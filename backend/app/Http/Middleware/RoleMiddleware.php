@@ -18,7 +18,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        $user = auth()->user();
+        $user = $request->user();
 
         // 1. Check if the user is authenticated and has one of the allowed roles
         if (!$user || !in_array($user->role, $roles)) {
