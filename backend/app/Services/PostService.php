@@ -8,19 +8,18 @@ use Illuminate\Support\Facades\Cache;
 use App\Services\CloudinaryService;
 use Illuminate\Http\UploadedFile;
 
+
 class PostService
 {
-    /**
-     * Inject CloudinaryService
-     */
-    public function __construct(private CloudinaryService $cloudinaryService) {}
-
     /**
      * Fetch paginated posts applying search, category, status filters, and sorting.
      *
      * @param array $filters
      * @return LengthAwarePaginator
      */
+
+    public function __construct(private CloudinaryService $cloudinaryService) {}
+
     public function getPaginated(array $filters = []): LengthAwarePaginator
     {
         $query = Post::with(['author', 'category'])
@@ -76,9 +75,19 @@ class PostService
             $data['published_at'] = now();
         }
 
-        // Handle featured image upload via Cloudinary
+        // If the post is published and has no date, set it now.
+        if ($data['status'] === 'published' && empty($data['published_at'])) {
+            $data['published_at'] = now();
+        }
+
+        // - Verify the field exists and is an UploadedFile
+        // - Upload the image to Cloudinary
+        // - Store the URL returned by Cloudinary in $data['featured_image']
         if (isset($data['featured_image']) && $data['featured_image'] instanceof UploadedFile) {
-            $data['featured_image'] = $this->cloudinaryService->uploadImage($data['featured_image'], 'smartcms/posts');
+            $data['featured_image'] = $this->cloudinaryService->uploadImage(
+                $data['featured_image'],
+                'smartcms/posts'               // Carpeta dentro de tu cuenta Cloudinary
+            );
         }
 
         return Post::create($data);
@@ -95,21 +104,32 @@ class PostService
     {
         $post = Post::findOrFail($id);
 
-        // Handle featured image upload via Cloudinary
+        // -------------------------------------------------
+        //  👉  Manejo de la imagen destacada en actualización
+        // -------------------------------------------------
+        // Caso 1: se envía una nueva imagen → borramos la antigua y subimos la nueva
         if (isset($data['featured_image']) && $data['featured_image'] instanceof UploadedFile) {
-            // Delete old image if exists
+            // Borrar la imagen anterior (si existe) para no acumular archivos en Cloudinary
             if ($post->featured_image) {
                 $this->cloudinaryService->deleteImage($post->featured_image);
             }
-            $data['featured_image'] = $this->cloudinaryService->uploadImage($data['featured_image'], 'smartcms/posts');
-        } elseif (array_key_exists('featured_image', $data) && $data['featured_image'] === null) {
-            // User wants to remove image
+            // Subir la nueva imagen
+            $data['featured_image'] = $this->cloudinaryService->uploadImage(
+                $data['featured_image'],
+                'smartcms/posts'
+            );
+        }
+        // Caso 2: el cliente manda 'featured_image' => null → quiere eliminarla sin reemplazar
+        elseif (array_key_exists('featured_image', $data) && $data['featured_image'] === null) {
             if ($post->featured_image) {
                 $this->cloudinaryService->deleteImage($post->featured_image);
             }
         }
+        // -------------------------------------------------
 
         $post->update($data);
+
+
         // Clear the specific cached post after updating its values
         Cache::forget("post_{$id}");
 
