@@ -25,12 +25,13 @@ class UpdatePostRequest extends FormRequest
         $postId = $this->route('id');
 
         return [
-            'title'       => 'sometimes|required|string|max:255',
-            'content'     => 'sometimes|required|string',
-            'excerpt'     => 'nullable|string|max:500',
-            'status'      => 'sometimes|required|in:draft,published,archived',
-            'category_id' => 'nullable|exists:categories,id',
-            'slug'        => 'nullable|string|unique:posts,slug,' . $postId,
+            'title'          => 'sometimes|required|string|max:255',
+            'content'        => 'sometimes|required|string',
+            'excerpt'        => 'nullable|string|max:500',
+            'status'         => 'sometimes|required|in:draft,published,archived',
+            'category_id'    => 'nullable|exists:categories,id',
+            'slug'           => 'nullable|string|unique:posts,slug,' . $postId,
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ];
     }
 }
