@@ -75,18 +75,13 @@ class PostService
             $data['published_at'] = now();
         }
 
-        // If the post is published and has no date, set it now.
-        if ($data['status'] === 'published' && empty($data['published_at'])) {
-            $data['published_at'] = now();
-        }
-
         // - Verify the field exists and is an UploadedFile
         // - Upload the image to Cloudinary
         // - Store the URL returned by Cloudinary in $data['featured_image']
         if (isset($data['featured_image']) && $data['featured_image'] instanceof UploadedFile) {
             $data['featured_image'] = $this->cloudinaryService->uploadImage(
                 $data['featured_image'],
-                'smartcms/posts'               // Carpeta dentro de tu cuenta Cloudinary
+                'smartcms/posts'               // Folder inside Cloudinary storage
             );
         }
 
