@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\PostController; // Added: PostController import
 use Illuminate\Support\Facades\Route;
 
@@ -29,18 +30,26 @@ Route::prefix('v1')->group(function () {
         Route::post('auth/refresh', [AuthController::class, 'refresh']);
         Route::get('auth/me', [AuthController::class, 'me']);
 
+        // Categories Reading — Available for admin, editor, and viewer roles
+        Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+        Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+
         // Posts Reading — Available for admin, editor, and viewer roles
         Route::get('posts', [PostController::class, 'index'])->name('posts.index');
         Route::get('posts/{id}', [PostController::class, 'show'])->name('posts.show');
 
-        // Posts Writing — Only accessible by admin and editor roles
+        // Posts & Categories Writing — Only accessible by admin and editor roles
         Route::middleware('role:admin,editor')->group(function () {
+            Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+            Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+
             Route::post('posts', [PostController::class, 'store'])->name('posts.store');
             Route::put('posts/{id}', [PostController::class, 'update'])->name('posts.update');
         });
 
-        // Posts Deletion — Only accessible by admin role
+        // Posts & Categories Deletion — Only accessible by admin role
         Route::middleware('role:admin')->group(function () {
+            Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
             Route::delete('posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
         });
 
