@@ -3,15 +3,16 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use OpenApi\Attributes as OA;
 
-/**
- * @OA\Schema(
- *     schema="StoreCategoryRequest",
- *     required={"name"},
- *     @OA\Property(property="name", type="string", example="Technology", description="The name of the category"),
- *     @OA\Property(property="description", type="string", nullable=true, example="All about tech", description="Optional description")
- * )
- */
+#[OA\Schema(
+    schema: "StoreCategoryRequest",
+    required: ["name"],
+    properties: [
+        new OA\Property(property: "name", description: "The name of the category", type: "string", example: "Technology"),
+        new OA\Property(property: "description", description: "Optional description", type: "string", example: "All about tech", nullable: true)
+    ]
+)]
 class StoreCategoryRequest extends FormRequest
 {
     /**

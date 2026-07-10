@@ -3,14 +3,15 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use OpenApi\Attributes as OA;
 
-/**
- * @OA\Schema(
- *     schema="UpdateCategoryRequest",
- *     @OA\Property(property="name", type="string", example="Technology Updated", description="The name of the category"),
- *     @OA\Property(property="description", type="string", nullable=true, example="Updated description", description="Optional description")
- * )
- */
+#[OA\Schema(
+    schema: "UpdateCategoryRequest",
+    properties: [
+        new OA\Property(property: "name", description: "The name of the category", type: "string", example: "Advanced Technology"),
+        new OA\Property(property: "description", description: "Optional description", type: "string", example: "Deep dive into tech", nullable: true)
+    ]
+)]
 class UpdateCategoryRequest extends FormRequest
 {
     /**
@@ -29,7 +30,7 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required|string|max:255|unique:categories,name,' . $this->route('category')->id,
+            'name' => 'sometimes|string|max:255|unique:categories,name,' . $this->route('category')->id,
             'description' => 'nullable|string',
         ];
     }
