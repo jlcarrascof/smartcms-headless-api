@@ -81,7 +81,7 @@ class PostService
         if (isset($data['featured_image']) && $data['featured_image'] instanceof UploadedFile) {
             $data['featured_image'] = $this->cloudinaryService->uploadImage(
                 $data['featured_image'],
-                'smartcms/posts'               // Carpeta dentro de tu cuenta Cloudinary
+                'smartcms/posts'               // Folder inside Cloudinary storage
             );
         }
 
