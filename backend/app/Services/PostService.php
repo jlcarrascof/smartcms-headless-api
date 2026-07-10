@@ -75,11 +75,6 @@ class PostService
             $data['published_at'] = now();
         }
 
-        // If the post is published and has no date, set it now.
-        if ($data['status'] === 'published' && empty($data['published_at'])) {
-            $data['published_at'] = now();
-        }
-
         // - Verify the field exists and is an UploadedFile
         // - Upload the image to Cloudinary
         // - Store the URL returned by Cloudinary in $data['featured_image']
