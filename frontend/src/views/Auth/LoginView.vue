@@ -39,7 +39,7 @@ async function handleLogin() {
       <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center size-12 rounded-xl bg-brand-600 text-white text-xl font-bold mb-4">S</div>
         <h1 class="text-2xl font-bold text-slate-900">SmartCMS</h1>
-        <p class="text-sm text-slate-500 mt-1">Admin Panel</p>
+        <p class="text-sm text-slate-600 font-semibold mt-1">Admin Panel</p>
       </div>
       <div class="card shadow-xl p-6 space-y-5">
         <div v-if="error" class="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">{{ error }}</div>

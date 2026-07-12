@@ -32,7 +32,7 @@ onMounted(async () => {
   <div class="p-6 space-y-6">
     <div>
       <h1 class="text-xl font-semibold text-slate-900">Dashboard</h1>
-      <p class="text-sm text-slate-500 mt-1">Welcome back, {{ auth.user?.name }}</p>
+      <p class="text-sm text-slate-600 font-semibold mt-1">Welcome back, {{ auth.user?.name }}</p>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="card p-5 space-y-2">
