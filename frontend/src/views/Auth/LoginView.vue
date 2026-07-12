@@ -18,8 +18,15 @@ async function handleLogin() {
   try {
     await auth.login(form)
     router.push("/dashboard")
-  } catch {
-    error.value = "Invalid credentials. Please try again."
+  } catch (err: any) {
+    console.error("Login error:", err)
+    if (err.response?.data?.message) {
+      error.value = err.response.data.message
+    } else if (err.message?.includes("Network Error")) {
+      error.value = "Cannot reach the server. Check if the backend is running."
+    } else {
+      error.value = "Invalid credentials. Please try again."
+    }
   } finally {
     loading.value = false
   }
