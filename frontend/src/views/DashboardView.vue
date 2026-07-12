@@ -11,20 +11,31 @@ const stats = ref({
   draftPosts: 0,
 })
 
+async function fetchStat(url: string): Promise<number> {
+  try {
+    const { data } = await apiClient.get(url)
+    return data.meta?.total ?? 0
+  } catch (err) {
+    console.error("Dashboard stat fetch failed:", url, err)
+    return 0
+  }
+}
+
 onMounted(async () => {
   if (!auth.user) {
-    await auth.fetchMe()
+    try {
+      await auth.fetchMe()
+    } catch {
+      // user will be redirected by router guard
+      return
+    }
   }
-  try {
-    const { data } = await apiClient.get("/posts?per_page=1")
-    stats.value.totalPosts = data.meta.total
-    const published = await apiClient.get("/posts?status=published&per_page=1")
-    stats.value.publishedPosts = published.data.meta.total
-    const drafts = await apiClient.get("/posts?status=draft&per_page=1")
-    stats.value.draftPosts = drafts.data.meta.total
-  } catch {
-    // stats stay at 0
-  }
+  const [total, published, drafts] = await Promise.all([
+    fetchStat("/posts?per_page=1"),
+    fetchStat("/posts?status=published&per_page=1"),
+    fetchStat("/posts?status=draft&per_page=1"),
+  ])
+  stats.value = { totalPosts: total, publishedPosts: published, draftPosts: drafts }
 })
 </script>
 
