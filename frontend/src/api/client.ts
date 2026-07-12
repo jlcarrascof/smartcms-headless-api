@@ -66,7 +66,7 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest)
       } catch (refreshError) {
         processQueue(refreshError, null)
-        auth.logout()
+        auth.clearSession()
         router.push('/login')
         return Promise.reject(refreshError)
       } finally {
