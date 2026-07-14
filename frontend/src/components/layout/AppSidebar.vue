@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router"
 import { useAuthStore } from "@/stores/auth"
+import { useTheme } from "@/composables/useTheme"
 
 const route = useRoute()
 const router = useRouter()
 const auth  = useAuthStore()
+const { isDark, toggle } = useTheme()
 
 function handleLogout() {
   auth.logout()
@@ -41,6 +43,15 @@ const navItems = [
         {{ item.label }}
       </RouterLink>
     </nav>
+    <div class="px-3 pb-2">
+      <button
+        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150 text-sidebar-foreground hover:bg-white/5 hover:text-white"
+        @click="toggle"
+      >
+        <span class="text-base leading-none">{{ isDark ? '☀️' : '🌙' }}</span>
+        {{ isDark ? 'Light Mode' : 'Dark Mode' }}
+      </button>
+    </div>
     <div class="px-3 pb-4">
       <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/5">
         <div class="flex items-center justify-center size-7 rounded-full bg-brand-500 text-white text-xs font-bold shrink-0">
