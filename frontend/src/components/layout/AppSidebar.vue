@@ -2,6 +2,7 @@
 import { useRoute, useRouter } from "vue-router"
 import { useAuthStore } from "@/stores/auth"
 import { useTheme } from "@/composables/useTheme"
+import { LayoutDashboard, FileText, Image, Settings, LogOut, Sun, Moon } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
@@ -14,10 +15,10 @@ function handleLogout() {
 }
 
 const navItems = [
-  { path: "/dashboard", label: "Dashboard", icon: "📊" },
-  { path: "/posts",     label: "Posts",     icon: "📝" },
-  { path: "/media",     label: "Media",     icon: "🖼️" },
-  { path: "/settings",  label: "Settings",  icon: "⚙️" },
+  { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/posts",     label: "Posts",     icon: FileText },
+  { path: "/media",     label: "Media",     icon: Image },
+  { path: "/settings",  label: "Settings",  icon: Settings },
 ]
 </script>
 
@@ -39,7 +40,7 @@ const navItems = [
             : 'text-sidebar-foreground hover:bg-white/5 hover:text-white',
         ]"
       >
-        <span class="text-base leading-none">{{ item.icon }}</span>
+        <component :is="item.icon" class="size-4 shrink-0" />
         {{ item.label }}
       </RouterLink>
     </nav>
@@ -48,7 +49,7 @@ const navItems = [
         class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150 text-sidebar-foreground hover:bg-white/5 hover:text-white"
         @click="toggle"
       >
-        <span class="text-base leading-none">{{ isDark ? '☀️' : '🌙' }}</span>
+        <component :is="isDark ? Sun : Moon" class="size-4 shrink-0" />
         {{ isDark ? 'Light Mode' : 'Dark Mode' }}
       </button>
     </div>
@@ -62,9 +63,7 @@ const navItems = [
           <p class="text-xs text-muted-foreground truncate">{{ auth.user?.role }}</p>
         </div>
         <button class="text-muted-foreground hover:text-destructive transition-colors" @click="handleLogout" title="Sign Out">
-          <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h6a2 2 0 012 2v1" />
-          </svg>
+          <LogOut class="size-4 shrink-0" />
         </button>
       </div>
     </div>
