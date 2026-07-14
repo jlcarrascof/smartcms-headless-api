@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { useAuthStore } from "@/stores/auth"
+import { FileText, CheckCircle, PenTool } from 'lucide-vue-next'
 import apiClient from "@/api/client"
 
 const auth = useAuthStore()
@@ -42,22 +43,22 @@ onMounted(async () => {
 <template>
   <div class="p-6 space-y-6">
     <div>
-      <h1 class="text-xl font-semibold text-foreground">Dashboard</h1>
-      <p class="text-sm text-muted-foreground font-semibold mt-1">Welcome back, {{ auth.user?.name }}</p>
+      <h1 class="text-xl font-semibold text-foreground tracking-tight">Dashboard</h1>
+      <p class="text-sm text-muted-foreground mt-1">Welcome back, {{ auth.user?.name }}</p>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="card p-5 space-y-2">
-        <span class="text-2xl">📝</span>
+        <FileText class="size-6 text-foreground" />
         <p class="text-2xl font-bold text-foreground">{{ stats.totalPosts }}</p>
         <p class="text-sm text-muted-foreground">Total Posts</p>
       </div>
       <div class="card p-5 space-y-2">
-        <span class="text-2xl">✅</span>
+        <CheckCircle class="size-6 text-green-600 dark:text-green-400" />
         <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ stats.publishedPosts }}</p>
         <p class="text-sm text-muted-foreground">Published</p>
       </div>
       <div class="card p-5 space-y-2">
-        <span class="text-2xl">✏️</span>
+        <PenTool class="size-6 text-amber-600 dark:text-amber-400" />
         <p class="text-2xl font-bold text-amber-600 dark:text-amber-400">{{ stats.draftPosts }}</p>
         <p class="text-sm text-muted-foreground">Drafts</p>
       </div>
