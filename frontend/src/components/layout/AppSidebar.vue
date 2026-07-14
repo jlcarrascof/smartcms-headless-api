@@ -2,7 +2,7 @@
 import { useRoute, useRouter } from "vue-router"
 import { useAuthStore } from "@/stores/auth"
 import { useTheme } from "@/composables/useTheme"
-import { LayoutDashboard, FileText, Image, Settings, LogOut, Sun, Moon } from 'lucide-vue-next'
+import { LayoutDashboard, FileText, Image, Settings, DoorOpen, Sun, Moon } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
@@ -63,7 +63,7 @@ const navItems = [
           <p class="text-xs text-muted-foreground truncate">{{ auth.user?.role }}</p>
         </div>
         <button class="text-muted-foreground hover:text-destructive transition-colors" @click="handleLogout" title="Sign Out">
-          <LogOut class="size-4 shrink-0" />
+          <DoorOpen class="size-4 shrink-0" />
         </button>
       </div>
     </div>
