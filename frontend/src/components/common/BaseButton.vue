@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
     :class="[
       variant === 'primary'   && 'btn-primary',
       variant === 'secondary' && 'btn-secondary',
-      variant === 'danger'    && 'inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 bg-red-600 text-white hover:bg-red-700 focus-visible:outline-red-600 disabled:opacity-50',
+      variant === 'danger'    && 'inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:outline-destructive disabled:opacity-50',
     ]"
   >
     <svg

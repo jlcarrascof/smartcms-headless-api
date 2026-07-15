@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = computed(() => !!token.value)
   const isAdmin = computed(() => user.value?.role === 'admin')
 
-  const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
+  const apiBase = import.meta.env.VITE_API_URL || '/api/v1'
 
   async function login(credentials: LoginCredentials): Promise<void> {
     const { data } = await apiClient.post<AuthResponse>('/auth/login', credentials)

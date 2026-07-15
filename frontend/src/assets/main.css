@@ -1,15 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap');
 @import "tailwindcss";
 
-@theme {
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Brand palette */
+  --color-brand-400: #60a5fa;
   --color-brand-50: #eff6ff;
   --color-brand-100: #dbeafe;
   --color-brand-500: #3b82f6;
   --color-brand-600: #2563eb;
   --color-brand-700: #1d4ed8;
+
+  /* Sidebar base color */
   --color-slate-sidebar: #1e293b;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --radius-card: 12px;
+
+  /* Semantic tokens mapped to CSS variables */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+
+  /* Radius scale derived from base */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Card shadow */
   --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* ===== LIGHT THEME (default) ===== */
+:root {
+  --radius: 0.75rem;
+
+  --background: #e2e8f0;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #3b82f6;
+  --sidebar: #1e293b;
+  --sidebar-foreground: #cbd5e1;
+}
+
+/* ===== DARK THEME ===== */
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
+  --primary: #60a5fa;
+  --primary-foreground: #0f172a;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --destructive: #f87171;
+  --destructive-foreground: #0f172a;
+  --border: rgb(255 255 255 / 0.1);
+  --input: rgb(255 255 255 / 0.15);
+  --ring: #60a5fa;
+  --sidebar: #0f172a;
+  --sidebar-foreground: #94a3b8;
 }
 
 @layer base {
@@ -18,12 +90,7 @@
     -webkit-font-smoothing: antialiased;
   }
   body {
-    @apply bg-slate-200 text-slate-900;
-  }
-  @variant dark {
-    body {
-      @apply bg-slate-900 text-slate-100;
-    }
+    @apply bg-background text-foreground;
   }
 }
 
@@ -32,7 +99,8 @@
     @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg
            text-sm font-medium transition-colors duration-150 cursor-pointer
            focus-visible:outline-2 focus-visible:outline-offset-2
-           bg-brand-600 text-white hover:bg-brand-700
+           bg-primary text-primary-foreground hover:bg-brand-700
+           dark:hover:bg-brand-500
            focus-visible:outline-brand-600 disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-secondary {
@@ -40,33 +108,43 @@
            text-sm font-medium transition-colors duration-150 cursor-pointer
            focus-visible:outline-2 focus-visible:outline-offset-2
            bg-white text-slate-700 border border-slate-200
-           hover:bg-slate-50 focus-visible:outline-slate-400;
+           hover:bg-slate-50
+           dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700
+           dark:hover:bg-slate-700
+           focus-visible:outline-slate-400;
   }
   .form-input {
-    @apply w-full rounded-lg border border-slate-200 px-3 py-2 text-sm
-           text-slate-900 placeholder:text-slate-400 bg-white
-           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent
+    @apply w-full rounded-lg border px-3 py-2 text-sm
+           bg-card text-foreground border-border
+           placeholder:text-muted-foreground
+           focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent
            transition-shadow duration-150;
   }
   .form-input-error {
-    @apply border-red-400 focus:ring-red-400;
+    @apply border-destructive focus:ring-destructive;
   }
   .form-label {
-    @apply block text-sm font-medium text-slate-700 mb-1.5;
+    @apply block text-sm font-medium mb-1.5
+           text-slate-700 dark:text-slate-300;
   }
   .form-error-msg {
-    @apply mt-1 text-xs text-red-600;
+    @apply mt-1 text-xs text-destructive;
   }
   .card {
-    @apply bg-white rounded-[--radius-card] border border-slate-200 shadow-[--shadow-card];
+    @apply bg-card text-card-foreground rounded-lg border border-border shadow-card;
   }
   .badge-draft {
-    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600;
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+           bg-muted text-muted-foreground;
   }
   .badge-published {
-    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700;
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+           bg-green-100 text-green-700
+           dark:bg-green-900/30 dark:text-green-400;
   }
   .badge-archived {
-    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700;
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+           bg-yellow-100 text-yellow-700
+           dark:bg-yellow-900/30 dark:text-yellow-400;
   }
 }
