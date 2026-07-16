@@ -66,10 +66,16 @@ export const usePostsStore = defineStore('posts', () => {
   function setFilter(key: keyof typeof filters, value: any) {
     (filters as any)[key] = value
     filters.page = 1
+    fetchPosts()
+  }
+
+  function goToPage(page: number) {
+    filters.page = page
+    fetchPosts()
   }
 
   return {
     posts, currentPost, loading, filters, pagination,
-    fetchPosts, fetchPost, create, update, remove, setFilter,
+    fetchPosts, fetchPost, create, update, remove, setFilter, goToPage,
   }
 })
