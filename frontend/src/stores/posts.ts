@@ -18,7 +18,7 @@ export const usePostsStore = defineStore('posts', () => {
   const pagination = reactive({
     current_page: 1,
     last_page: 1,
-    per_page: 12,
+    per_page: 9,
     total: 0,
   })
 
@@ -27,7 +27,7 @@ export const usePostsStore = defineStore('posts', () => {
   async function fetchPosts() {
     loading.value = true
     try {
-      const params: Record<string, any> = { page: filters.page }
+      const params: Record<string, any> = { page: filters.page, per_page: 9 }
       if (filters.status) params.status = filters.status
       if (filters.search) params.search = filters.search
       if (filters.category_id) params.category_id = filters.category_id
