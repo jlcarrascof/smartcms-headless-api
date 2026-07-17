@@ -46,18 +46,8 @@ const emit = defineEmits<{
             </div>
           </div>
           <div class="flex justify-end gap-2 pt-2">
-            <button class="btn-secondary text-sm" @click="emit('cancel')">{{ cancelText }}</button>
-            <button
-              :class="[
-                'btn text-sm transition-colors duration-150',
-                variant === 'danger'
-                  ? 'bg-white text-slate-700 border border-slate-200 hover:bg-destructive hover:text-destructive-foreground hover:border-destructive dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-destructive dark:hover:text-destructive-foreground'
-                  : 'btn-primary',
-              ]"
-              @click="emit('confirm')"
-            >
-              {{ confirmText }}
-            </button>
+            <button class="btn-secondary text-sm flex-1" @click="emit('cancel')">{{ cancelText }}</button>
+            <button class="btn-secondary text-sm flex-1" @click="emit('confirm')">{{ confirmText }}</button>
           </div>
         </div>
       </div>
