@@ -33,14 +33,25 @@ const form = reactive({
 })
 
 onMounted(async () => {
-  categories.value = await getCategories()
+  try {
+    const cats = await getCategories()
+    console.log("getCategories returned in editor:", cats)
+    categories.value = cats
+  } catch (err) {
+    console.error("Failed to load categories in editor:", err)
+  }
+  
   if (props.postId) {
-    const post = await postsStore.fetchPost(props.postId)
-    form.title = post.title
-    form.content = post.content ?? ''
-    form.excerpt = post.excerpt ?? ''
-    form.status = post.status
-    form.category_id = post.category?.id ?? null
+    try {
+      const post = await postsStore.fetchPost(props.postId)
+      form.title = post.title
+      form.content = post.content ?? ''
+      form.excerpt = post.excerpt ?? ''
+      form.status = post.status
+      form.category_id = post.category?.id ?? null
+    } catch (err) {
+      console.error("Failed to fetch post in editor:", err)
+    }
   }
 })
 
