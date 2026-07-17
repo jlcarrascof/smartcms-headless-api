@@ -1,12 +1,21 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import { computed } from 'vue'
 import AppSidebar from '@/components/layout/AppSidebar.vue'
 import { useTheme } from '@/composables/useTheme'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const isAuthPage = computed(() => route.name === 'login')
+const auth = useAuthStore()
 useTheme()
+
+onMounted(() => {
+  if (auth.token && !auth.user) {
+    auth.fetchMe()
+  }
+})
 </script>
 
 <template>
