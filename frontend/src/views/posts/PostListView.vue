@@ -3,8 +3,10 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePostsStore } from '@/stores/posts'
 import { useCategoriesApi } from '@/api/categories'
+import { useToast } from '@/composables/useToast'
 import { Plus, Search, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import type { Category } from '@/types'
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import PostCard from '@/components/posts/PostCard.vue'
 
 const router = useRouter()
@@ -13,7 +15,10 @@ const { getCategories } = useCategoriesApi()
 
 const categories = ref<Category[]>([])
 const searchInput = ref('')
+const deleteTarget = ref<number | null>(null)
 let searchTimeout: ReturnType<typeof setTimeout> | null = null
+
+const { show: showToast } = useToast()
 
 onMounted(async () => {
   categories.value = await getCategories()
@@ -28,9 +33,19 @@ function onSearchInput(value: string) {
 }
 
 function confirmDelete(id: number) {
-  if (confirm('Are you sure you want to delete this post?')) {
-    postsStore.remove(id).then(() => postsStore.fetchPosts())
-  }
+  deleteTarget.value = id
+}
+
+async function handleDeleteConfirm() {
+  if (deleteTarget.value === null) return
+  await postsStore.remove(deleteTarget.value)
+  deleteTarget.value = null
+  showToast('Post deleted successfully', 'success', 4000)
+  postsStore.fetchPosts()
+}
+
+function handleDeleteCancel() {
+  deleteTarget.value = null
 }
 </script>
 
@@ -130,5 +145,16 @@ function confirmDelete(id: number) {
         <ChevronRight class="size-4" />
       </button>
     </div>
+
+    <ConfirmDialog
+      :show="deleteTarget !== null"
+      title="Delete post"
+      message="Are you sure you want to delete this post? This action cannot be undone."
+      confirm-text="Delete"
+      cancel-text="Cancel"
+      variant="danger"
+      @confirm="handleDeleteConfirm"
+      @cancel="handleDeleteCancel"
+    />
   </div>
 </template>
