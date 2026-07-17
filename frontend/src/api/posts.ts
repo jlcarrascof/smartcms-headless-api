@@ -7,15 +7,15 @@ export function usePostsApi() {
   }
 
   function getPost(id: number): Promise<Post> {
-    return apiClient.get(`/posts/${id}`).then(res => res.data)
+    return apiClient.get(`/posts/${id}`).then(res => res.data.data)
   }
 
   function createPost(data: FormData | Record<string, any>): Promise<Post> {
-    return apiClient.post('/posts', data).then(res => res.data)
+    return apiClient.post('/posts', data).then(res => res.data.data)
   }
 
   function updatePost(id: number, data: FormData | Record<string, any>): Promise<Post> {
-    return apiClient.put(`/posts/${id}`, data).then(res => res.data)
+    return apiClient.put(`/posts/${id}`, data).then(res => res.data.data)
   }
 
   function deletePost(id: number): Promise<void> {
