@@ -75,8 +75,6 @@ class PostController extends Controller
     {
         $post = $this->postService->findOrFail($id);
 
-        // Define route name context for post detail so resource includes content field
-        request()->route()->setUserResolver(fn() => auth()->user());
         return new PostResource($post);
     }
 

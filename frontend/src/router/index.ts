@@ -18,6 +18,24 @@ const router = createRouter({
       component: () => import('@/views/DashboardView.vue'),
     },
     {
+      path: '/posts',
+      name: 'posts',
+      meta: { requiresAuth: true },
+      component: () => import('@/views/posts/PostListView.vue'),
+    },
+    {
+      path: '/posts/new',
+      name: 'posts-create',
+      meta: { requiresAuth: true },
+      component: () => import('@/views/posts/PostCreateView.vue'),
+    },
+    {
+      path: '/posts/:id/edit',
+      name: 'posts-edit',
+      meta: { requiresAuth: true },
+      component: () => import('@/views/posts/PostEditView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/login',
     },
